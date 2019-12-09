@@ -1,26 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { INCREMENT, DECREMENT, INCREMENT_IF_ODD, INCREMENT_ASYNC } from './actionTypes';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App({ counter, dispatch }) {
+	const action = (type) => () => dispatch({ type });
+	return (
+		<div className="App">
+			Clicked: {counter} times <button onClick={action(INCREMENT)}>+</button>
+			<button onClick={action(DECREMENT)}>-</button>
+			<button onClick={action(INCREMENT_IF_ODD)}>Increment if odd</button>
+			<button onClick={action(INCREMENT_ASYNC)}>Increment async</button>
+		</div>
+	);
+}
+function mapStateToProps(state) {
+	return {
+		counter: state.counter,
+	}
+}
+App.propTypes = {
+  counter: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
